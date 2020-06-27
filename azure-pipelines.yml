@@ -1,0 +1,37 @@
+trigger:
+  batch: true
+
+name: $(BuildID)
+
+variables:
+  - group: keyvault-image-build-variables
+  - group: packer-image-build-variables
+
+stages:
+- stage: win10_1909_evd_O365pp
+  displayName: Windows 10 O365 Pro Plus
+  jobs:
+  - job: build
+    displayName: Build Image
+    pool:
+      vmImage: windows-2019
+    steps:
+    - task: riezebosch.Packer.PackerTool.PackerTool@0
+      displayName: 'Use Packer 1.5.6'
+      inputs:
+        version: 1.5.6
+    - task: PackerBuild@1
+      displayName: 'Build Image'
+      inputs:
+        templateType: custom
+        customTemplateLocation: 'packer.json'
+        customTemplateParameters: '{"ADOServicePrincipalAppId":"$(ADOAppID)","ADOServicePrincipalSecret":"$(ADOAppSecret)","TenantId":"$(TenantId)","SubscriptionId":"$(SubscriptionId)","ImageDestRG":"$(ImageDestRG)","TempResourceGroup":"$(TempResourceGroup)","VirtualNetwork":"$(VirtualNetwork)","VirtualNetworkRG":"$(VirtualNetworkRG)","Subnet":"$(Subnet)","Location":"$(Location)","VMSize":"$(VMSize)","StorageAccountInstallersName":"$(StorageAccountName)","StorageAccountInstallersKey":"$(StorageAccountKey)","StorageAccountInstallersPath":"$(StorageAccountInstallersPath)"}'
+        imageUri: BuildImage
+    - task: nkdagility.variablehydration.variabledehydration-task.variabledehydration@0
+      displayName: 'Save Build Variables: BuildImage'
+      inputs:
+        prefixes: BuildImage
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: Build Image and associated Template'
+      inputs:
+        ArtifactName: 'Build Image'
