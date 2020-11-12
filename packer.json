@@ -4,13 +4,17 @@
     "ADOServicePrincipalSecret": "",
     "TenantId": "",
     "SubscriptionId": "",
+
     "ImageDestRG": "",    
     "TempResourceGroup": "",
+
     "VirtualNetwork": "",
     "VirtualNetworkRG": "",
     "Subnet": "",
+
     "Location": "",
     "VMSize": "",
+
     "StorageAccountInstallersName": "",
     "StorageAccountInstallersKey": "",
     "StorageAccountInstallersPath": "",
