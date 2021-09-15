@@ -78,6 +78,15 @@
       ]
     },
     {
+      "type": "WindowsUpdate",
+      "searchCriteria": "IsInstalled=0",
+      "filters": [
+        "exclude:$_.Title -like 'Preview'",
+        "include:$true"
+      ],
+      "updateLimit": 20
+    }
+    {
       "type": "powershell",
       "script": "install_apps.ps1"
     },
